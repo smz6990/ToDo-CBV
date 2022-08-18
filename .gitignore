@@ -36,6 +36,10 @@ MANIFEST
 pip-log.txt
 pip-delete-this-directory.txt
 
+# Docker files
+Dockerfile
+docker-compose.yml
+
 # Unit test / coverage reports
 htmlcov/
 .tox/
