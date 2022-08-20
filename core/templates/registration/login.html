@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>login</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="justify-content-md-center">
+        <div class="mt-5 mb-4">
+          <h2>Please Login to see your todo list</h2>
+          <br>
+          <form method="POST" >
+            {% if form.errors %} 
+              <p>{{form.errors}}</p>
+            {% endif %}
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="InputEmail1">Email address</label>
+              <input
+                type="email"
+                name="username"
+                class="form-control"
+                placeholder="Email"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="InputPassword1">Password</label>
+              <input
+                type="password"
+                name="password"
+                class="form-control"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+          </form>
+          <div class="mt-2">Don't have account? <a href="{% url 'signup' %}">Signup</a></div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

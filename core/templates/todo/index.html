@@ -1,0 +1,54 @@
+{% load humanize %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todo app</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="justify-content-md-center">
+        <div class="mt-5 mb-4">
+          <center><h3>Hello {{request.user.email}}, Your Todo List is below</h3></center>
+        </div>
+        <div class="mt-5 mb-4">
+          <form action="{% url 'todo:add' %}" method="post">
+            {% csrf_token %}
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="content" placeholder="Type your new task here!" required >
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </div>
+            </div>
+          </form>
+          <a href="{% url 'logout' %}">logout</a>
+          <hr />
+          
+          {% for task in tasks %}
+            {% if task.is_done %}
+              {{forloop.counter}}. <del> {{task.content}}</del> - done {{task.updated_date|naturaltime}}
+              <a href="#" role="button" class="btn btn-success btn-sm disabled mb-1">Done</a>
+              <a href="#" role="button" class="btn btn-warning btn-sm disabled mb-1">Edit</a>
+            {% else %}
+              {{forloop.counter}}. {{task.content}} -  created {{task.created_date|naturaltime}}
+              <a href="{% url 'todo:done' pk=task.id %}" role="button" class="btn btn-success btn-sm mb-1">Done</a>
+              <a href="{% url 'todo:edit' pk=task.id %}" role="button" class="btn btn-warning btn-sm mb-1">Edit</a>
+            {% endif %}
+            <a href="{% url 'todo:delete' pk=task.id %}" role="button" class="btn btn-danger btn-sm mb-1">Delete</a>
+            <br>
+          {% empty %}
+            <p>There is no task</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

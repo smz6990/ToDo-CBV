@@ -7,7 +7,7 @@ class PostAdmin(admin.ModelAdmin):
     creating class to modify the admin panel
     """
     date_hierarchy = 'created_date'
-    list_display = ['author', 'content', 'is_done']
+    list_display = ['author', 'content', 'is_done','created_date']
     list_filter = ['author', 'is_done']
     search_fields = ['author', 'content']
     

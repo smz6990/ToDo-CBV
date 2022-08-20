@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signup</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"
+      integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <div class="justify-content-md-center">
+        <div class="mt-5 mb-4">
+          <h2>Please signup to see your todo list</h2>
+          <br>
+          <form method="post">
+            {% csrf_token %}
+            {% if form.errors %} 
+              <p>{{form.errors}}</p>
+            {% endif %}
+            <!-- Email input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example3"
+                >Email address</label
+              >
+              <input
+                type="email"
+                id="form3Example3"
+                name="email"
+                class="form-control"
+                placeholder="Email"
+                required
+              />
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example4">Password</label>
+              <input
+                type="password"
+                name="password1"
+                id="form3Example4"
+                class="form-control"
+                placeholder="Password"
+                required
+              />
+            </div>
+            <div class="form-outline mb-4">
+              <label class="form-label" for="form3Example4"
+                >Confirm Password</label
+              >
+              <input
+                type="password"
+                id="form3Example4"
+                name="password2"
+                class="form-control"
+                placeholder="Confirm Password"
+                required
+              />
+            </div>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary mb-4">
+              
+              Sign up
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

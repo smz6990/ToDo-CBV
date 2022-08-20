@@ -18,11 +18,13 @@ from django.urls import path,include
 
 from django.conf import settings
 from django.conf.urls.static import static
-
+from accounts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('',include('todo.urls')),
+    path('',include('todo.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('signup',views.SignupCreateView.as_view(),name='signup')
 ]
 
 if settings.DEBUG:
