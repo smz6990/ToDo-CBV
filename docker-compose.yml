@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./core:/app
+    ports:
+      - "8000:8000"
+    container_name: todobackend
+    environment:
+      - django-insecure-&)#)fsnkv!^8$6uf0*ny(6!64i!mb$-jwf3_rkosm23e4*59!8
+      - DEBUG=True
