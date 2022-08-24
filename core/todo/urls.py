@@ -10,5 +10,6 @@ urlpatterns = [
     path('<int:pk>/done/',views.TaskDoneUpdateView.as_view(),name='done'),
     path('<int:pk>/delete/',views.TaskDeleteView.as_view(),name='delete'),
     path('<int:pk>/edit/',views.TaskEditView.as_view(),name='edit'),
+    path('api/v1/',include("todo.api.v1.urls")),
     
 ]

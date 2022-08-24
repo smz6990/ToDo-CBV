@@ -20,11 +20,16 @@ from django.conf import settings
 from django.conf.urls.static import static
 from accounts import views
 
+from rest_framework.documentation import include_docs_urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('todo.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
-    path('signup',views.SignupCreateView.as_view(),name='signup')
+    path('signup',views.SignupCreateView.as_view(),name='signup'),
+    path('api-auth/', include('rest_framework.urls')),
+    path('api-docs/', include_docs_urls(title='API Documentation')),
+
 ]
 
 if settings.DEBUG:

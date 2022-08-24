@@ -9,6 +9,7 @@ services:
     ports:
       - "8000:8000"
     container_name: todobackend
+    restart: always
     environment:
-      - django-insecure-&)#)fsnkv!^8$6uf0*ny(6!64i!mb$-jwf3_rkosm23e4*59!8
-      - DEBUG=True
+      - "SECRET_KEY:django-insecure-&)#)fsnkv!^8%6uf0*ny(6!64i!mb%-jwf3_rkosm23e4*59!8"
+      - "DEBUG:True"

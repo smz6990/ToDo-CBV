@@ -43,6 +43,10 @@ INSTALLED_APPS = [
     
     'accounts.apps.AccountsConfig',
     'todo.apps.TodoConfig',
+    
+    'rest_framework',
+    'django_filters',
+    
 ]
 
 MIDDLEWARE = [
@@ -147,5 +151,7 @@ LOGOUT_REDIRECT_URL = '/'
 
 ############### Third Party ###################
 
+# rest_framework config
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
 
 ###############################################

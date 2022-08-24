@@ -20,3 +20,6 @@ class Task(models.Model):
         
     def __str__(self):
         return '{} - {}'.format(self.author, self.content)
+    
+    def get_snippet(self):
+        return self.content[:10]
