@@ -24,12 +24,18 @@ class TaskSerializer(serializers.ModelSerializer):
         validated_data['author'] = self.context.get('request').user
         return super().create(validated_data)
     
-    def get_url(self,obj):
-       request = self.context.get('request')
-       abs_url = obj.pk
-       return request.build_absolute_uri(abs_url)
+    def get_url(self, obj):
+        """
+        Getting absolute url for task
+        """
+        request = self.context.get('request')
+        abs_url = obj.pk
+        return request.build_absolute_uri(abs_url)
     
     def to_representation(self, instance):
+        """
+        Modifying the representation of serializer
+        """
         rep = super().to_representation(instance)
         request = self.context.get('request')
         if request.parser_context.get('kwargs').get('pk'):

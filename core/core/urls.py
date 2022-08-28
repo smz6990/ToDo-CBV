@@ -43,7 +43,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('todo.urls')),
-    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/', include('accounts.urls')),
     path('signup',views.SignupCreateView.as_view(),name='signup'),
     path('api-auth/', include('rest_framework.urls')),
     path('api-docs/', include_docs_urls(title='API Documentation')),

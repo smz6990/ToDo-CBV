@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'todo.apps.TodoConfig',
     
     'rest_framework',
+    'rest_framework.authtoken',
     'django_filters',
     'drf_yasg',
     
@@ -154,5 +155,14 @@ LOGOUT_REDIRECT_URL = '/'
 
 # rest_framework config
 REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+
+# rest_framework authentication config
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
 
 ###############################################
