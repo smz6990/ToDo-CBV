@@ -5,6 +5,7 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from .paginations import CustomPagination
 from todo.models import Task
 from .serializers import TaskSerializer
+from .permissions import IsVerified
 
 
 class TaskModelViewSet(viewsets.ModelViewSet):
@@ -12,7 +13,7 @@ class TaskModelViewSet(viewsets.ModelViewSet):
     A simple ModelViewSet to perform CRUD functions on todo Task.
     """
     serializer_class = TaskSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsVerified]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filterset_fields = ['is_done']
     search_fields = ['content']

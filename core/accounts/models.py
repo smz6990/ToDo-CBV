@@ -15,6 +15,7 @@ class User(AbstractBaseUser,PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
+    is_verified = models.BooleanField(default=False)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     
@@ -31,10 +32,10 @@ class User(AbstractBaseUser,PermissionsMixin):
     
 
 
-@receiver(post_save, sender=User)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    """
-    Create a token for User when signing up
-    """
-    if created:
-        Token.objects.create(user=instance)
+# @receiver(post_save, sender=User)
+# def create_auth_token(sender, instance=None, created=False, **kwargs):
+#     """
+#     Create a token for User when signing up
+#     """
+#     if created:
+#         Token.objects.create(user=instance)

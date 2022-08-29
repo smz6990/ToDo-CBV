@@ -3,8 +3,10 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.contrib.auth import authenticate
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth import get_user_model
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from accounts.models import User
+User = get_user_model()
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -62,18 +64,51 @@ class CustomAuthTokenSerializer(serializers.Serializer):
         password = attrs.get('password')
 
         if email and password:
-            user = authenticate(request=self.context.get('request'),
-                                username=email, password=password)
-
+            user = authenticate(request=self.context.get('request'), username=email, password=password)
             # The authenticate call simply returns None for is_active=False
             # users. (Assuming the default ModelBackend authentication
             # backend.)
             if not user:
                 msg = _('Unable to log in with provided credentials.')
                 raise serializers.ValidationError(msg, code='authorization')
+            if not user.is_verified:
+                msg = _('User is not verified.')
+                raise serializers.ValidationError(msg, code='Verification')
         else:
             msg = _('Must include "username" and "password".')
             raise serializers.ValidationError(msg, code='authorization')
 
         attrs['user'] = user
         return attrs
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializer for change password
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs.get("new_password") != attrs.get("new_password1"):
+            raise serializers.ValidationError({"detail": "passwords did not match"})
+        try:
+            validate_password(attrs.get("new_password"))
+        except ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+
+        return super().validate(attrs)
+    
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    
+    def validate(self, attrs):
+        validated_data = super().validate(attrs)
+        if not self.user.is_verified:
+            print(self.user)
+            raise serializers.ValidationError({"detail": "User is not verified"})
+        validated_data['email'] = self.user.email
+        validated_data['user_id'] = self.user.id
+        return validated_data
+

@@ -8,18 +8,18 @@ class CustomUserAdmin(UserAdmin):
     creating a class to show the User fields in admin panel
     """
     model = User
-    list_display = ['email','is_superuser','is_staff','is_active']
-    list_filter = ['email','is_superuser','is_staff','is_active']
+    list_display = ['email', 'is_superuser', 'is_staff', 'is_active', 'is_verified']
+    list_filter = ['email', 'is_superuser', 'is_staff', 'is_active', 'is_verified']
     search_fields = ('email',)
     ordering = ('email',)
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser', 'groups', 'user_permissions')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active','is_superuser', 'is_verified', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login',)}),
     )
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active', 'is_superuser')}
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active', 'is_superuser', 'is_verified')}
         ),
     )
