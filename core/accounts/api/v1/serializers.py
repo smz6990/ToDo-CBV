@@ -106,9 +106,55 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         validated_data = super().validate(attrs)
         if not self.user.is_verified:
-            print(self.user)
             raise serializers.ValidationError({"detail": "User is not verified"})
         validated_data['email'] = self.user.email
         validated_data['user_id'] = self.user.id
         return validated_data
 
+class EmailResendSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist as e:
+            raise serializers.ValidationError({"detail":"User Does not exist"}) from e
+        if user.is_verified:
+            raise serializers.ValidationError({"detail":"User is already verified"})
+        attrs['user'] = user
+        return super().validate(attrs)
+    
+class PasswordResetSendSerializer(serializers.Serializer):
+    """
+    serializer for reset the password to send reset email
+    """
+    email = serializers.EmailField(required=True)
+    
+    def validate(self, attrs):
+        email = attrs.get('email')
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist as e:
+            raise serializers.ValidationError({"detail":"User Does not exist"}) from e
+        attrs['user'] = user
+        return super().validate(attrs)
+    
+    
+class PasswordResetDoneSerializer(serializers.Serializer):
+    """
+    serializer for reset the password after getting token
+    """
+    
+    new_password = serializers.CharField(required=True)
+    new_password1 = serializers.CharField(required=True)
+
+    def validate(self, attrs):
+        if attrs.get("new_password") != attrs.get("new_password1"):
+            raise serializers.ValidationError({"detail": "passwords did not match"})
+        try:
+            validate_password(attrs.get("new_password"))
+        except ValidationError as e:
+            raise serializers.ValidationError({"new_password": list(e.messages)})
+
+        return super().validate(attrs)
