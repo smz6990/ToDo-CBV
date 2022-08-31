@@ -12,18 +12,19 @@ class TaskModelViewSet(viewsets.ModelViewSet):
     """
     A simple ModelViewSet to perform CRUD functions on todo Task.
     """
+
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated, IsVerified]
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['is_done']
-    search_fields = ['content']
-    ordering_fields = ['created_date']
+    filterset_fields = ["is_done"]
+    search_fields = ["content"]
+    ordering_fields = ["created_date"]
     pagination_class = CustomPagination
-    
+
     def get_queryset(self):
         """
         This view should return a list of all the tasks
         for the currently authenticated user.
         """
-        user  = self.request.user
+        user = self.request.user
         return Task.objects.filter(author=user)
