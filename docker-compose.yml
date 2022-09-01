@@ -9,6 +9,21 @@ services:
     ports:
       - "8000:8000"
     container_name: todobackend
+    restart: always
     environment:
       - SECRET_KEY=django-insecure-&)#)fsnkv!^8%6uf0*ny(6!64i!mb%-jwf3_rkosm23e4*59!8
       - DEBUG=True
+  
+  smtp4dev:
+    image: rnwood/smtp4dev
+    restart: always
+    ports:
+      - '5000:80'
+      - '25:25'
+      - '143:143'
+    volumes:
+        - smtp4dev-data:/smtp4dev
+    environment:
+      - ServerOptions__HostName=smtp4dev
+volumes:
+  smtp4dev-data:
