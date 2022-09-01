@@ -91,7 +91,9 @@ class TestAccountsApi:
 
     def test_change_password_204(self, api_client):
         client = api_client()
-        change_password_endpoint = reverse(f"{self.endpoint}:change-password")
+        change_password_endpoint = reverse(
+            f"{self.endpoint}:change-password"
+        )
         user = self.create_user_obj()
         client.force_authenticate(user)
         data = {
@@ -105,7 +107,9 @@ class TestAccountsApi:
     def test_change_password_400_wrong_password(self, api_client):
         # wrong old password
         client = api_client()
-        change_password_endpoint = reverse(f"{self.endpoint}:change-password")
+        change_password_endpoint = reverse(
+            f"{self.endpoint}:change-password"
+        )
         user = self.create_user_obj()
         client.force_authenticate(user)
         data = {
@@ -119,7 +123,9 @@ class TestAccountsApi:
     def test_change_password_400_mismatch_password(self, api_client):
         # mismatch new password
         client = api_client()
-        change_password_endpoint = reverse(f"{self.endpoint}:change-password")
+        change_password_endpoint = reverse(
+            f"{self.endpoint}:change-password"
+        )
         user = self.create_user_obj()
         client.force_authenticate(user)
         data = {
@@ -133,7 +139,9 @@ class TestAccountsApi:
     def test_change_password_401_unauthorized_user(self, api_client):
         # Unauthorized  user
         client = api_client()
-        change_password_endpoint = reverse(f"{self.endpoint}:change-password")
+        change_password_endpoint = reverse(
+            f"{self.endpoint}:change-password"
+        )
         user = self.create_user_obj()
         data = {
             "old_password": "a/1234567",
