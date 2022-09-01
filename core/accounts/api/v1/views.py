@@ -201,6 +201,11 @@ class PasswordResetSendAPIView(GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data.get("user")
+        if not user.is_verified:
+            return Response(
+            {"detail": "User is not verified"},
+            status=status.HTTP_401_UNAUTHORIZED,
+        )    
         token = AccessToken.for_user(user)
         message = EmailMessage(
             "email/reset_password.tpl",

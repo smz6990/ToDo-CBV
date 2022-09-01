@@ -1,6 +1,6 @@
 {% extends "email/base.html" %}
 {% block subject %}
-Activate account
+Reset Password 
 {% endblock %}
 
 {% block html %}

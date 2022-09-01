@@ -19,7 +19,7 @@ urlpatterns = [
     path(
         "token/logout/",
         views.CustomDiscardTokenView.as_view(),
-        name="token-login",
+        name="token-logout",
     ),
     path(
         "registration/change-password/",
@@ -50,8 +50,8 @@ urlpatterns = [
     path(
         "jwt/create/",
         views.CustomTokenObtainPairView.as_view(),
-        name="token_obtain_pair",
+        name="token-obtain-pair",
     ),
-    path("jwt/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
-    path("jwt/verify/", TokenVerifyView.as_view(), name="token_verify"),
+    path("jwt/refresh/", TokenRefreshView.as_view(), name="token-refresh"),
+    path("jwt/verify/", TokenVerifyView.as_view(), name="token-verify"),
 ]
