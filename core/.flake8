@@ -10,4 +10,5 @@ exclude =
     .env,
     settings.py,
     __init__.py,
-    tests
+    tests,
+    *_initial.py
