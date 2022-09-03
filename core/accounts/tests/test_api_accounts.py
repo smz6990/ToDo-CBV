@@ -253,7 +253,6 @@ class TestAccountsApi:
         client = api_client()
         jwt_endpoint = reverse(f"{self.endpoint}:token-obtain-pair")
         user = self.create_user_obj()
-        # client.force_authenticate(user=user)
         data = {"email": user.email, "password": "a/1234567"}
         response = client.post(path=jwt_endpoint, data=data)
         assert response.status_code == 200
@@ -263,7 +262,6 @@ class TestAccountsApi:
         client = api_client()
         jwt_endpoint = reverse(f"{self.endpoint}:token-obtain-pair")
         user = self.create_user_obj(is_verified=False)
-        # client.force_authenticate(user=user)
         data = {"email": user.email, "password": "a/1234567"}
         response = client.post(path=jwt_endpoint, data=data)
         assert response.status_code == 400
@@ -280,7 +278,6 @@ class TestAccountsApi:
         client = api_client()
         jwt_endpoint = reverse(f"{self.endpoint}:token-refresh")
         user = self.create_user_obj()
-        # client.force_authenticate(user=user)
         refresh = str(RefreshToken.for_user(user))
         data = {"refresh": refresh}
         response = client.post(path=jwt_endpoint, data=data)
@@ -291,8 +288,34 @@ class TestAccountsApi:
         client = api_client()
         jwt_endpoint = reverse(f"{self.endpoint}:token-refresh")
         user = self.create_user_obj()
-        # client.force_authenticate(user=user)
         refresh = f"{str(RefreshToken.for_user(user))}123"
         data = {"refresh": refresh}
+        response = client.post(path=jwt_endpoint, data=data)
+        assert response.status_code == 401
+
+    def test_jwt_token_verify_200_with_token_refresh(self, api_client):
+        client = api_client()
+        jwt_endpoint = reverse(f"{self.endpoint}:token-verify")
+        user = self.create_user_obj()
+        token = f"{str(RefreshToken.for_user(user))}"
+        data = {"token": token}
+        response = client.post(path=jwt_endpoint, data=data)
+        assert response.status_code == 200
+
+    def test_jwt_token_verify_200_with_token_access(self, api_client):
+        client = api_client()
+        jwt_endpoint = reverse(f"{self.endpoint}:token-verify")
+        user = self.create_user_obj()
+        token = f"{str(RefreshToken.for_user(user).access_token)}"
+        data = {"token": token}
+        response = client.post(path=jwt_endpoint, data=data)
+        assert response.status_code == 200
+
+    def test_jwt_token_verify_401_with_invalid_token(self, api_client):
+        client = api_client()
+        jwt_endpoint = reverse(f"{self.endpoint}:token-verify")
+        user = self.create_user_obj()
+        token = f"{str(RefreshToken.for_user(user))}123"
+        data = {"token": token}
         response = client.post(path=jwt_endpoint, data=data)
         assert response.status_code == 401
