@@ -1,6 +1,16 @@
 version: "3.9"
 
 services:
+  redis:
+    image: redis
+    restart: always
+    container_name: redis
+    ports:
+      - "6379:6379"
+    command: redis-server --save 60 1 --loglevel warning
+    volumes:
+      - redisdata:/data
+
   backend:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -10,10 +20,22 @@ services:
       - "8000:8000"
     container_name: todobackend
     restart: always
+    depends_on:
+      - redis
     environment:
       - SECRET_KEY=django-insecure-&)#)fsnkv!^8%6uf0*ny(6!64i!mb%-jwf3_rkosm23e4*59!8
       - DEBUG=True
   
+  worker:
+    build: .
+    command: celery -A core worker --loglevel=info
+    restart: always
+    depends_on:
+      - redis
+      - backend
+    volumes:
+     - ./core:/app
+
   smtp4dev:
     image: rnwood/smtp4dev
     restart: always
@@ -26,20 +48,6 @@ services:
     environment:
       - ServerOptions__HostName=smtp4dev
 
-  master:
-    image: locustio/locust
-    ports:
-     - "8089:8089"
-    restart: always
-    volumes:
-      - ./core/locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --master -H http://backend:8000
-  
-  worker:
-    image: locustio/locust
-    restart: always
-    volumes:
-      - ./core/locust:/mnt/locust
-    command: -f /mnt/locust/locustfile.py --worker --master-host master
 volumes:
   smtp4dev-data:
+  redisdata:
