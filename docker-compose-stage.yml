@@ -10,6 +10,8 @@ services:
     command: redis-server --save 60 1 --loglevel warning
     volumes:
       - redisdata:/data
+    networks:
+      - backend-network
 
   backend:
     build: .
@@ -18,17 +20,39 @@ services:
       - ./core:/app
       - static_volume:/app/static/
       - media_volume:/app/media/
-
     expose:
       - "8000"
     container_name: todobackend
     restart: always
     depends_on:
       - redis
+      - db
     environment:
       - SECRET_KEY=django-insecure-&)#)fsnkv!^8%6uf0*ny(6!64i!mb%-jwf3_rkosm23e4*59!8
       - DEBUG=False
+      - SQL_ENGINE=django.db.backends.postgresql
+      - SQL_DATABASE=postgres_django_db
+      - SQL_USER=postgres
+      - SQL_PASSWORD=django_postgres
+      - SQL_HOST=db
+      - SQL_PORT=5432
+    networks:
+      - backend-network
   
+  db:
+    image: postgres
+    restart: always
+    ports:
+     - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=postgres_django_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=django_postgres
+    networks:
+      - backend-network
+
   nginx:
     image: nginx
     container_name: nginx
@@ -39,7 +63,12 @@ services:
       - ./default.conf:/etc/nginx/conf.d/deault.conf
       - static_volume:/home/app/static/
       - media_volume:/home/app/media/
-
+    depends_on:
+      - backend
+      - db
+    networks:
+      - backend-network
+  
   worker:
     build: .
     command: celery -A core worker --loglevel=info
@@ -49,8 +78,13 @@ services:
       - backend
     volumes:
      - ./core:/app
-
+    networks:
+      - backend-network
 volumes:
   redisdata:
   static_volume:
   media_volume:
+  postgres_data:
+
+networks:
+  backend-network:
