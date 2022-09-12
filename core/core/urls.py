@@ -67,10 +67,12 @@ urlpatterns = [
         schema_view.with_ui("redoc", cache_timeout=0),
         name="schema-redoc",
     ),
-    
-    path('weather/', cache_page(60*20)(WeatherView.as_view()), name='weather'),
-    path('weather/api/', WeatherAPIView.as_view(), name='api-weather'),
-    
+    path(
+        "weather/",
+        cache_page(60 * 20)(WeatherView.as_view()),
+        name="weather",
+    ),
+    path("weather/api/", WeatherAPIView.as_view(), name="api-weather"),
 ]
 
 if settings.DEBUG:

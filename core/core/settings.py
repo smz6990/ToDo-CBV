@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="test")
 DEBUG = config("DEBUG", cast=bool, default=True)
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -51,8 +51,8 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_yasg",
     "mail_templated",
-    'django_celery_beat',
-    'django_celery_results',
+    "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -199,9 +199,9 @@ SIMPLE_JWT = {
 }
 
 # celery config
-CELERY_BROKER_URL = 'redis://redis:6379/1'
-CELERY_RESULT_BACKEND = 'redis://redis:6379'
-CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_BROKER_URL = "redis://redis:6379/1"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
 
 # cache with redis config
 CACHES = {
@@ -210,7 +210,7 @@ CACHES = {
         "LOCATION": "redis://redis:6379/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
+        },
     }
 }
 

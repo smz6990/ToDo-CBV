@@ -10,4 +10,7 @@ exclude =
     .env,
     settings.py,
     __init__.py,
-    tests
+    tests,
+    *.yml,
+    envs,
+    migrations

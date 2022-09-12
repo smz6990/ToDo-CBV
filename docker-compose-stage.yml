@@ -27,15 +27,8 @@ services:
     depends_on:
       - redis
       - db
-    environment:
-      - SECRET_KEY=django-insecure-&)#)fsnkv!^8%6uf0*ny(6!64i!mb%-jwf3_rkosm23e4*59!8
-      - DEBUG=False
-      - SQL_ENGINE=django.db.backends.postgresql
-      - SQL_DATABASE=postgres_django_db
-      - SQL_USER=postgres
-      - SQL_PASSWORD=django_postgres
-      - SQL_HOST=db
-      - SQL_PORT=5432
+    env_file:
+      - envs/stage/django/.env_django
     networks:
       - backend-network
   
@@ -46,10 +39,8 @@ services:
      - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data/
-    environment:
-      - POSTGRES_DB=postgres_django_db
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=django_postgres
+    env_file:
+      - envs/stage/db/.env_db
     networks:
       - backend-network
 
@@ -80,6 +71,19 @@ services:
      - ./core:/app
     networks:
       - backend-network
+
+  worker-celery-beat:
+    build: .
+    command: celery -A core beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    restart: always
+    depends_on:
+      - redis
+      - backend
+    volumes:
+     - ./core:/app
+    networks:
+      - backend-network
+
 volumes:
   redisdata:
   static_volume:
