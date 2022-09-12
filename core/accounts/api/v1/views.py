@@ -123,7 +123,9 @@ class ChangePasswordAPIView(GenericAPIView):
             self.object.save()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            serializer.errors, status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -159,7 +161,8 @@ class EmailVerificationAPIView(APIView):
             )
         except jwt.exceptions.DecodeError:
             return Response(
-                {"error": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid Token"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
 
@@ -185,7 +188,9 @@ class EmailResendAPIView(GenericAPIView):
 
         EmailThreading(message).start()
         return Response(
-            {"Detail": "Email for activating your account sent successfully"},
+            {
+                "Detail": "Email for activating your account sent successfully"
+            },
             status=status.HTTP_200_OK,
         )
 
@@ -243,7 +248,8 @@ class PasswordResetDoneAPIView(GenericAPIView):
             )
         except jwt.exceptions.DecodeError:
             return Response(
-                {"error": "Invalid Token"}, status=status.HTTP_400_BAD_REQUEST
+                {"error": "Invalid Token"},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         serializer = self.get_serializer(data=request.data)

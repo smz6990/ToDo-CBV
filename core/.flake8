@@ -11,4 +11,6 @@ exclude =
     settings.py,
     __init__.py,
     tests,
-    *_initial.py
+    *.yml,
+    envs,
+    migrations

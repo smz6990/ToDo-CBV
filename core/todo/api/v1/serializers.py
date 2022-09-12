@@ -3,14 +3,14 @@ from accounts.models import User
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["email", "id"]
 
 
 class TaskSerializer(serializers.ModelSerializer):
-    author = UserSerializer(read_only=True)
+    author = CustomUserSerializer(read_only=True)
     snippet = serializers.ReadOnlyField(source="get_snippet")
     url = serializers.SerializerMethodField(read_only=True)
 

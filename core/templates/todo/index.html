@@ -30,23 +30,58 @@
             </div>
           </form>
           <a href="{% url 'accounts:logout' %}">logout</a>
-          <hr />
-          
+          <a class="ml-5" href="{% url 'weather' %}">Weather</a>
+          <a class="ml-5" href="{% url 'api-weather' %}">Api Weather</a>
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">No.</th>
+                <th scope="col">Content</th>
+                <th scope="col">Created</th>
+                <th scope="col">Updated</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+
           {% for task in tasks %}
+
+          
             {% if task.is_done %}
-              {{forloop.counter}}. <del> {{task.content}}</del> - done {{task.updated_date|naturaltime}}
-              <a href="#" role="button" class="btn btn-success btn-sm disabled mb-1">Done</a>
-              <a href="#" role="button" class="btn btn-warning btn-sm disabled mb-1">Edit</a>
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td><del> {{task.content}}</del></td>
+              <td>{{ task.created_date|naturaltime }}</td>
+              <td>{{task.updated_date|naturaltime}}</td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <a href="#" role="button" class="btn btn-success btn-sm disabled mb-1">Done</a>
+                  <a href="#" role="button" class="btn btn-warning btn-sm disabled mb-1">Edit</a>
+                  <a href="{% url 'todo:delete' pk=task.id %}" role="button" class="btn btn-danger btn-sm mb-1">Delete</a>
+                </div>
+              </td>
+            </tr>
             {% else %}
-              {{forloop.counter}}. {{task.content}} -  created {{task.created_date|naturaltime}}
-              <a href="{% url 'todo:done' pk=task.id %}" role="button" class="btn btn-success btn-sm mb-1">Done</a>
-              <a href="{% url 'todo:edit' pk=task.id %}" role="button" class="btn btn-warning btn-sm mb-1">Edit</a>
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{task.content}}</td>
+              <td>{{ task.created_date|naturaltime }}</td>
+              <td>{{task.updated_date|naturaltime}}</td>
+              <td>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <a href="{% url 'todo:done' pk=task.id %}" role="button" class="btn btn-success btn-sm mb-1">Done</a>
+                 <a href="{% url 'todo:edit' pk=task.id %}" role="button" class="btn btn-warning btn-sm mb-1">Edit</a>
+                 <a href="{% url 'todo:delete' pk=task.id %}" role="button" class="btn btn-danger btn-sm mb-1">Delete</a>
+                </div>
+              </td>
+            </tr>
             {% endif %}
-            <a href="{% url 'todo:delete' pk=task.id %}" role="button" class="btn btn-danger btn-sm mb-1">Delete</a>
             <br>
           {% empty %}
             <p>There is no task</p>
           {% endfor %}
+        </tbody>
+      </table>
         </div>
       </div>
     </div>

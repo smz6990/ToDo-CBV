@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY", default="test")
 DEBUG = config("DEBUG", cast=bool, default=True)
 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -51,6 +51,8 @@ INSTALLED_APPS = [
     "django_filters",
     "drf_yasg",
     "mail_templated",
+    "django_celery_beat",
+    "django_celery_results",
 ]
 
 MIDDLEWARE = [
@@ -87,10 +89,21 @@ WSGI_APPLICATION = "core.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
+# }
+
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+        "ENGINE": config("SQL_ENGINE", default="django.db.backends.sqlite3"),
+        "NAME": config("SQL_DATABASE", default=BASE_DIR / "db.sqlite3"),
+        "USER": config("SQL_USER", default="postgres"),
+        "PASSWORD": config("SQL_PASSWORD", default="django_postgres"),
+        "HOST": config("SQL_HOST", default="db"),
+        "PORT": config("SQL_PORT", default="5432"),
     }
 }
 
@@ -152,7 +165,7 @@ AUTH_USER_MODEL = "accounts.User"
 LOGIN_REDIRECT_URL = "/"
 LOGOUT_REDIRECT_URL = "/"
 
-# email config
+# email config for smtp4dev
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp4dev"
 EMAIL_PORT = 25
@@ -183,6 +196,22 @@ SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=1),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "UPDATE_LAST_LOGIN": True,
+}
+
+# celery config
+CELERY_BROKER_URL = "redis://redis:6379/1"
+CELERY_RESULT_BACKEND = "redis://redis:6379"
+CELERY_BEAT_SCHEDULER = "django_celery_beat.schedulers:DatabaseScheduler"
+
+# cache with redis config
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
 }
 
 ###############################################
