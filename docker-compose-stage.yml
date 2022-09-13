@@ -22,7 +22,7 @@ services:
       - media_volume:/app/media/
     expose:
       - "8000"
-    container_name: todobackend
+    container_name: django_backend
     restart: always
     depends_on:
       - redis
@@ -34,6 +34,7 @@ services:
   
   db:
     image: postgres
+    container_name: db
     restart: always
     ports:
      - "5432:5432"
