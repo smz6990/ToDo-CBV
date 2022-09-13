@@ -30,8 +30,10 @@
             </div>
           </form>
           <a href="{% url 'accounts:logout' %}">logout</a>
-          <a class="ml-5" href="{% url 'weather' %}">Weather</a>
-          <a class="ml-5" href="{% url 'api-weather' %}">Api Weather</a>
+          {% if not tasks %}
+            <br>
+            <p>There is no task</p>
+          {% else %}
           <table class="table table-hover">
             <thead>
               <tr>
@@ -77,9 +79,9 @@
             </tr>
             {% endif %}
             <br>
-          {% empty %}
-            <p>There is no task</p>
+          
           {% endfor %}
+          {% endif %}
         </tbody>
       </table>
         </div>
