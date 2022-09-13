@@ -14,4 +14,5 @@ RUN pip3 install -r requirements.txt
 
 COPY ./core /app/
 
+RUN mkdir -p /app/staticfiles
 RUN python manage.py collectstatic --no-input
