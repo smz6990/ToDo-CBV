@@ -20,6 +20,7 @@ jobs:
 
 
   Deploy:
+  
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
     name: deploy
     runs-on: ubuntu-latest
