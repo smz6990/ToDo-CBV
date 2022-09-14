@@ -29,9 +29,9 @@ jobs:
      - name: deploy on cloud
        uses: appleboy/ssh-action@master
        with:
+        host: ${{secrets.HOST}}
         username: ${{secrets.USERNAME}}
         key: ${{secrets.KEY}}
-        host: ${{secrets.HOST}}
         port: ${{secrets.PORT}}
         script: |
           ls
