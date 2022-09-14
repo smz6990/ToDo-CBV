@@ -14,13 +14,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: setup docker-compose
-      run: docker-compose -f docker-compose-stage.yml up -d
+      run: docker-compose up -d
     - name: Run tests
       run: docker-compose exec -T backend sh -c "flake8 && pytest ."
 
 
   Deploy:
-  
     if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
     name: deploy
     runs-on: ubuntu-latest
@@ -37,5 +36,5 @@ jobs:
         script: |
           cd ${{secrets.PROJECT_PATH}}
           docker-compose -f docker-compose-stage.yml stop
-          git pull
+          git pull origin main
           docker-compose -f docker-compose-stage.yml restart
