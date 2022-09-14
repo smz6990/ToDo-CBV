@@ -29,9 +29,12 @@ jobs:
      - name: deploy on cloud
        uses: appleboy/ssh-action@master
        with:
+        host: ${{secrets.HOST}}
         username: ${{secrets.USERNAME}}
         key: ${{secrets.KEY}}
-        host: ${{secrets.HOST}}
         port: ${{secrets.PORT}}
         script: |
-          ls
+          cd ${{secrets.PROJECT_PATH}}
+          docker-compose -f docker-compose-stage.yml stop
+          git pull
+          docker-compose -f docker-compose-stage.yml restart
