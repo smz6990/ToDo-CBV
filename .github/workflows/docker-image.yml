@@ -1,4 +1,4 @@
-name: Django ToDo REST API
+name: Django ToDo REST API test and deploy
 
 on:
   push:
@@ -8,13 +8,34 @@ on:
 
 jobs:
 
-  build:
-
+  Test:
+    name: test
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: setup docker-compose
-      run: docker-compose up -d
+      run: docker-compose -f docker-compose-stage.yml up -d
     - name: Run tests
       run: docker-compose exec -T backend sh -c "flake8 && pytest ."
+
+
+  Deploy:
+  
+    if: ${{ always() && contains(join(needs.*.result, ','), 'success') }} 
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: Test
+    steps:
+     - uses: actions/checkout@v3
+     - name: deploy on cloud
+       uses: appleboy/ssh-action@master
+       with:
+        host: ${{secrets.HOST}}
+        username: ${{secrets.USERNAME}}
+        key: ${{secrets.KEY}}
+        port: ${{secrets.PORT}}
+        script: |
+          cd ${{secrets.PROJECT_PATH}}
+          docker-compose -f docker-compose-stage.yml stop
+          git pull
+          docker-compose -f docker-compose-stage.yml restart
