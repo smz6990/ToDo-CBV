@@ -31,7 +31,7 @@
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This project run in docker and has three phases :
+This project run in docker and has two phases :
 - development
 - stagging
 
